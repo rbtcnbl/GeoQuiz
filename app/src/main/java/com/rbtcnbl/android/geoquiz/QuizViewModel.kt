@@ -1,7 +1,5 @@
-package com.rbtcnbl.android.geoquiiz
+package com.rbtcnbl.android.geoquiz
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 
 private const val TAG = "QuiizViewModel"
@@ -11,6 +9,7 @@ class QuizViewModel : ViewModel() {
 
     private var numOfCorrectAnswer = 0;
     var currentIndex = 0
+    var isCheater = false
 
     private val questionBank = listOf(
         Question(R.string.question_russia, true),
