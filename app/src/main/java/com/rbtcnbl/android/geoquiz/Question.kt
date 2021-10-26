@@ -1,4 +1,4 @@
-package com.rbtcnbl.android.geoquiiz
+package com.rbtcnbl.android.geoquiz
 
 import androidx.annotation.StringRes
 

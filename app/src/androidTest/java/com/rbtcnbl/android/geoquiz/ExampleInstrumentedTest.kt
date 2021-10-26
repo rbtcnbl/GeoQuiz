@@ -1,4 +1,4 @@
-package com.rbtcnbl.android.geoquiiz
+package com.rbtcnbl.android.geoquiz
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
