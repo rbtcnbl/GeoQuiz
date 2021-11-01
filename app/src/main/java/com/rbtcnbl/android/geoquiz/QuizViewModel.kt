@@ -2,12 +2,11 @@ package com.rbtcnbl.android.geoquiz
 
 import androidx.lifecycle.ViewModel
 
-private const val TAG = "QuiizViewModel"
-private const val NUM_QUESTIONS = 6;
+private const val TAG = "QuizViewModel"
 
 class QuizViewModel : ViewModel() {
 
-    private var numOfCorrectAnswer = 0;
+
     var currentIndex = 0
     var isCheater = false
 
@@ -27,24 +26,18 @@ class QuizViewModel : ViewModel() {
 
     //TODO после последнего вопроса проходит список заново и не выводит процент (упражнение на стр 107)
     fun moveToNext() {
-        currentIndex = (currentIndex + 1) % questionBank.size
-//        if(currentIndex == questionBank.size){
-//                val messageResId = (numOfCorrectAnswer / NUM_QUESTIONS)*100
-//                Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-//
-//            } else {
-//                currentIndex = (currentIndex + 1) % questionBank.size
-//
-//            }
+        if (currentIndex != questionBank.lastIndex) {
+            currentIndex = (currentIndex + 1) % questionBank.size
+        }
     }
 
     fun moveBack() {
         if (currentIndex != 0) {
             currentIndex = (currentIndex - 1) % questionBank.size
-        } else {
-            //игнорирует, иначе крашится
-            //решить потом, что делать
         }
+    }
+
+    fun showAnswerForCheat() {
 
     }
 }
