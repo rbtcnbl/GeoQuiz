@@ -26,27 +26,18 @@ class QuizViewModel : ViewModel() {
 
     //TODO после последнего вопроса проходит список заново и не выводит процент (упражнение на стр 107)
     fun moveToNext() {
-        currentIndex = (currentIndex + 1) % questionBank.size
-//        if(currentIndex == questionBank.size){
-//                val messageResId = (numOfCorrectAnswer / NUM_QUESTIONS)*100
-//                Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-//
-//            } else {
-//                currentIndex = (currentIndex + 1) % questionBank.size
-//
-//            }
+        if (currentIndex != questionBank.lastIndex) {
+            currentIndex = (currentIndex + 1) % questionBank.size
+        }
     }
 
     fun moveBack() {
         if (currentIndex != 0) {
             currentIndex = (currentIndex - 1) % questionBank.size
-        } else {
-            //игнорирует, иначе крашится
-            //решить потом, что делать
         }
     }
 
-    fun showAnswerForCheat(){
+    fun showAnswerForCheat() {
 
     }
 }

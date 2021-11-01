@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
+private const val IS_CHEATING = "cheating"
 private const val REQUEST_CODE_CHEAT = 0
 private const val NUM_QUESTIONS = 6;
 
@@ -42,6 +43,9 @@ class MainActivity : AppCompatActivity() {
 
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.currentIndex = currentIndex
+
+        val isCheating = savedInstanceState?.getBoolean(IS_CHEATING) ?: false
+        quizViewModel.isCheater = isCheating
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -129,6 +133,7 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(savedInstanceState)
         Log.i(TAG, "onSaveInstanceState")
         savedInstanceState.putInt(KEY_INDEX, quizViewModel.currentIndex)
+        savedInstanceState.putBoolean(IS_CHEATING, quizViewModel.isCheater)
     }
 
     override fun onStop() {
@@ -168,28 +173,21 @@ class MainActivity : AppCompatActivity() {
 
         }
         massCheckQuestion.add(currentQuestion)
-
-//        val messageResId = when {
-//            quizViewModel.isCheater -> R.string.judgment_toast
-//            userAnswer == correctAnswer -> R.string.correct_toast
-//            else -> R.string.incorrect_toast
-//        }
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-//        trueButton.isEnabled = false
-//        falseButton.isEnabled = false
+
 
     }
 
     private fun sumOfCorrectAnswer() {
-        val correctAnswer = (numOfCorrectAnswer / NUM_QUESTIONS) * 100
-        Toast.makeText(this, correctAnswer, Toast.LENGTH_SHORT).show()
+        val correctAnswer = (numOfCorrectAnswer.toFloat() / NUM_QUESTIONS) * 100
+        Toast.makeText(this, "$correctAnswer%", Toast.LENGTH_SHORT).show()
     }
 
     private fun checkActualQuestion() {
         when {
             massCheckQuestion.contains(quizViewModel.currentQuestionText) -> {
-                trueButton.isEnabled = true
-                falseButton.isEnabled = true
+                trueButton.isEnabled = false
+                falseButton.isEnabled = false
             }
             else -> {
                 trueButton.isEnabled = true
