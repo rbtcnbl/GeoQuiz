@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProviders
 
 const val EXTRA_ANSWER_SHOWN = "com.rbtcnbl.android.geoquiz.answer_shown"
 private const val EXTRA_ANSWER_IS_TRUE =

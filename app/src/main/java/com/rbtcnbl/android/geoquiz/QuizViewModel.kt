@@ -2,12 +2,11 @@ package com.rbtcnbl.android.geoquiz
 
 import androidx.lifecycle.ViewModel
 
-private const val TAG = "QuiizViewModel"
-private const val NUM_QUESTIONS = 6;
+private const val TAG = "QuizViewModel"
 
 class QuizViewModel : ViewModel() {
 
-    private var numOfCorrectAnswer = 0;
+
     var currentIndex = 0
     var isCheater = false
 
@@ -45,6 +44,9 @@ class QuizViewModel : ViewModel() {
             //игнорирует, иначе крашится
             //решить потом, что делать
         }
+    }
+
+    fun showAnswerForCheat(){
 
     }
 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
 private const val REQUEST_CODE_CHEAT = 0
+private const val NUM_QUESTIONS = 6;
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextView: TextView
 
 
-    // private var currentIndex = 0
+    private var numOfCorrectAnswer: Int = 0;
+    private val massCheckQuestion: MutableList<Int> = ArrayList()
 
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
@@ -54,18 +56,23 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
         trueButton.setOnClickListener { view: View ->
-//            val toast = Toast.makeText(
-//                this,
-//                R.string.correct_toast,
-//                Toast.LENGTH_SHORT
-//            ).show()
-            //           toast.setGravity(Gravity.TOP, 0, 0)
-            //           toast.show()
             checkAnswer(true)
+            trueButton.isEnabled = false
+            falseButton.isEnabled = false
+
+            if (quizViewModel.currentIndex == NUM_QUESTIONS - 1) {
+                sumOfCorrectAnswer()
+            }
         }
 
         falseButton.setOnClickListener { view: View ->
             checkAnswer(false)
+            trueButton.isEnabled = false
+            falseButton.isEnabled = false
+
+            if (quizViewModel.currentIndex == NUM_QUESTIONS - 1) {
+                sumOfCorrectAnswer()
+            }
         }
 
 
@@ -136,33 +143,58 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun updateQuestion() {
-        // val questionTextResId = questionBank[currentIndex].textResId
-        //  Log.d(TAG, "Updating question text", Exception())
         val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
-        trueButton.isEnabled = true
-        falseButton.isEnabled = true
+
+        checkActualQuestion()
     }
 
     //TODO ослабить проверку на "читерство" и разрешать отвечать на другие вопросы
     private fun checkAnswer(userAnswer: Boolean) {
-        //  val correctAnswer = questionBank[currentIndex].answer
+        val currentQuestion = quizViewModel.currentQuestionText
         val correctAnswer = quizViewModel.currentQuestionAnswer
-//        val messageResId = if (userAnswer == correctAnswer) {
-//            //    numOfCorrectAnswer + 1
-//            R.string.correct_toast
-//        } else {
-//            R.string.incorrect_toast
-//        }
+        var messageResId = 0
+        when {
+            quizViewModel.isCheater -> {
+                messageResId = R.string.judgment_toast
+            }
+            userAnswer == correctAnswer -> {
+                messageResId = R.string.correct_toast
+                numOfCorrectAnswer++
+            }
+            else -> {
+                messageResId = R.string.incorrect_toast
+            }
 
-        val messageResId = when {
-            quizViewModel.isCheater -> R.string.judgment_toast
-            userAnswer == correctAnswer -> R.string.correct_toast
-            else -> R.string.incorrect_toast
         }
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
-        trueButton.isEnabled = false
-        falseButton.isEnabled = false
+        massCheckQuestion.add(currentQuestion)
 
+//        val messageResId = when {
+//            quizViewModel.isCheater -> R.string.judgment_toast
+//            userAnswer == correctAnswer -> R.string.correct_toast
+//            else -> R.string.incorrect_toast
+//        }
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+//        trueButton.isEnabled = false
+//        falseButton.isEnabled = false
+
+    }
+
+    private fun sumOfCorrectAnswer() {
+        val correctAnswer = (numOfCorrectAnswer / NUM_QUESTIONS) * 100
+        Toast.makeText(this, correctAnswer, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun checkActualQuestion() {
+        when {
+            massCheckQuestion.contains(quizViewModel.currentQuestionText) -> {
+                trueButton.isEnabled = true
+                falseButton.isEnabled = true
+            }
+            else -> {
+                trueButton.isEnabled = true
+                falseButton.isEnabled = true
+            }
+        }
     }
 }
